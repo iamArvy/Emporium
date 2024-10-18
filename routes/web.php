@@ -35,13 +35,25 @@ Route::group([
     'namespace'=> App\Http\Controllers\Emporium::class
 ], function () {
     Route::get('/', 'EmporiumController@index')->name('home');
+    Route::get('/products', 'EmporiumController@products')->name('products');
+    Route::get('/product/{product}', 'ProductController@show')->name('product.show');
+    Route::get('/cart', 'EmporiumController@cart')->name('cart');
+    Route::get('/checkout', 'EmporiumController@checkout')->name('checkout');
+    Route::get('/profile', 'EmporiumController@about')->name('about');
+    Route::get('/contact', 'EmporiumController@contact')->name('contact');
+    Route::get('/search', 'EmporiumController@search')->name('search');
+    Route::get('/category/{category}', 'EmporiumController@category')->name('category');
+    Route::get('/order/{order}', 'EmporiumController@order')->name('order');
+    Route::get('/orders', 'EmporiumController@orders')->name('orders');
+    Route::get('/stores', 'EmporiumController@stores')->name('stores');
+    Route::get('/stores/{store}', 'EmporiumController@store')->name('store');
     // Route::get('/dashboard', 'CustomerController@dashboard')->name('dashboard');
     // Route::get('/orders', 'CustomerController@orders')->name('orders');
     // Route::get('/settings', 'CustomerController@settings')->name('settings');
     // Route::get('/statistics', 'CustomerController@statistics')->name('statistics');
 });
 Route::get('/test',  [TestMongoController::class, 'store']);
-Route::get('/store/dashboard',  [TestMongoController::class, 'store']);
+// Route::get('/store/dashboard',  [TestMongoController::class, 'store']);
 Route::group([
     // 'middleware'=> ['role:store', 'auth'],
     'middleware'=> ['role:store', 'auth'],

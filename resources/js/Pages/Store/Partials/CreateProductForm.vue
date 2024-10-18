@@ -16,6 +16,7 @@ const form = useForm({
     description: null,
     category_id: 1,
     images: null,
+    price: null
 });
 
 const photoInput = ref(null);
@@ -110,6 +111,18 @@ const clearPhotoFileInput = () => {
                     autocomplete="username"
                 />
                 <InputError :message="form.errors.description" class="mt-2" />
+
+            </div>
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="price" value="Price" />
+                <TextInput
+                    id="price"
+                    v-model="form.price"
+                    type="number"
+                    class="mt-1 block w-small"
+                    required
+                />
+                <InputError :message="form.errors.price" class="mt-2" />
 
             </div>
         </template>

@@ -17,6 +17,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import DialogModal from "@/Components/DialogModal.vue";
 import axios from "axios";
+import CreateProductForm from "./Partials/CreateProductForm.vue";
 
 const props = defineProps<{
     products: {
@@ -81,28 +82,39 @@ const cproduct = ref({});
 const open = ref(false);
 const modalTitle = ref("");
 const modalType = ref("");
+const currentComponent = ref()
 const openproduct = (id: string) => {
     modalTitle.value = "Product Information";
     open.value = true;
     const response = axios.get(route("store.product.show", { product: id }));
-    console.log(response.data.product);
-    // cproduct.value = response.product
 };
 const closeModal = () => {
     open.value = false;
+    modalType.value = ''
 };
+const opencreate = () => {
+    modalTitle.value = "CreateProduct"
+    open.value = true
+    modalType.value = 'form'
+}
 </script>
 
 <template>
     <DashboardLayout title="Products">
         <DialogModal :show="open" :close="closeModal" :title="modalTitle">
             <template #content>
+<!--                 
                 Hello
-                {{}}
+                {{}} -->
+                <CreateProductForm v-if="modalType == 'form' " />
             </template>
         </DialogModal>
         <Section> </Section>
         <Section>
+
+        <PrimaryButton @click="opencreate()">
+            Create New
+        </PrimaryButton>
             <Table :headers="ProductHeaders">
                 <TableRow
                     v-for="product in $page.props.products"

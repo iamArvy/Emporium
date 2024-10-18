@@ -11,13 +11,18 @@ class Product extends Model
 {
     use HasFactory;
     protected $connection = 'mongodb';
-    protected $fillable = ['name', 'description', 'category_id', 'images', 'attributes', 'store_id'];
+    protected $fillable = ['name', 'description', 'category_id', 'images', 'attributes', 'store_id', 'price'];
 
     public function store()
     {
-        return $this->belongsTo(Store::class, 'store_id');
+        return Store::find($this->store_id); // Adjust this based on your schema
+
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
     public function variants()
     {
         return $this->hasMany(Variant::class);

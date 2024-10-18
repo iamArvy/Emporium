@@ -1,6 +1,5 @@
 <script setup>
 import SecondaryButton from './SecondaryButton.vue'
-import Item from './ProductListItem.vue'
 defineProps({
   title: String
 })
@@ -8,12 +7,7 @@ defineProps({
 <template>
   <section>
     <h1>{{ title }}</h1>
-    <ul>
-      <li><Item /></li>
-      <li><Item /></li>
-      <li><Item /></li>
-      <li><Item /></li>
-    </ul>
+    <slot />
     <SecondaryButton value="View All" />
   </section>
 </template>
