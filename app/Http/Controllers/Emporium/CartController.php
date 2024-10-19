@@ -6,31 +6,44 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Requests\CreateCartRequest;
+use App\Services\CartService;
 
 class CartController extends Controller
 {
-    public function __construct()
+    protected $cartService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(CartService $cartService)
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
+        $this->cartService = $cartService;
     }
 
     public function index()
     {
-        $cart = $this->user()->cart;
-        return $this->render('Emporium/Cart', $cart);
+        try{
+            $cart = $this->cartService->getCartItems($this->user());
+            return $this->render('Emporium/Cart', $cart);
+        }catch(Error $e){
+            return back()->withErrors(['error' => 'Failed to get cart items.']);
+        }
     }
 
-    public function create(CreateCartRequest $request)
+    public function add(Request $request)
     {
-        $id = $request->product;
-        $product = Product::find($id);
+        $formdata = $request->all();
+        $product = Product::find($formdata['product_id']);
 
         if (!$product) {
             return redirect()->route('error', ['code' => 404, 'message' => 'Product Not Found']);
         }
 
-        $validated = $request->validated();
-        $cartitem = $this->user()->cart()->create($validated);
+        $cartitem = $this->user()->cart()->create($formdata);
+
 
         if ($cartitem) {
             return redirect()->route('cart.index')->with('success', 'Item added to cart.');
@@ -49,6 +62,7 @@ class CartController extends Controller
         }
 
         try {
+            // $this->authorize('update', $cart);
             $validated = $request->validate([
                 'quantity' => 'required|integer|min:1',
             ]);
@@ -59,7 +73,7 @@ class CartController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function remove(Request $request)
     {
         $id = $request->id;
         $cart = $this->user()->cart()->find($id);
@@ -70,5 +84,34 @@ class CartController extends Controller
         }
 
         return redirect()->route('error', ['code' => 404, 'message' => 'Item not found in User Cart']);
+    }
+
+    public function clear(Request $request)
+    {
+        $ids = $request->get['ids'];
+        foreach ($ids as $id) {
+            $cart = $this->user()->cart()->find($id);
+            if ($cart) {
+                $cart->delete();
+            }
+        }
+        $cart = $this->user()->cart()->find($id);
+
+        if ($cart) {
+            $cart->delete();
+            return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
+        }
+
+        return redirect()->route('error', ['code' => 404, 'message' => 'Item not found in User Cart']);
+    }
+
+    public function checkout(Request $request)
+    {
+        try{
+            $cart = $this->cartService->getCartItems($this->user());
+            return $this->render('Emporium/Checkout', $cart);
+        }catch(Error $e){
+            return back()->withErrors(['error' => 'Failed to get cart items.']);
+        }
     }
 }

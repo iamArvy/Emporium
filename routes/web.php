@@ -42,7 +42,8 @@ Route::group([
     Route::get('/profile', 'EmporiumController@about')->name('about');
     Route::get('/contact', 'EmporiumController@contact')->name('contact');
     Route::get('/search', 'EmporiumController@search')->name('search');
-    Route::get('/category/{category}', 'EmporiumController@category')->name('category');
+    Route::get('/products/{category}', 'EmporiumController@category')->name('category');
+    Route::get('/products', 'EmporiumController@products')->name('products');
     Route::get('/order/{order}', 'EmporiumController@order')->name('order');
     Route::get('/orders', 'EmporiumController@orders')->name('orders');
     Route::get('/stores', 'EmporiumController@stores')->name('stores');
@@ -52,6 +53,20 @@ Route::group([
     // Route::get('/settings', 'CustomerController@settings')->name('settings');
     // Route::get('/statistics', 'CustomerController@statistics')->name('statistics');
 });
+
+Route::group([
+    'middleware'=> ['auth:sanctum'],
+    'namespace'=> App\Http\Controllers\Emporium::class,
+    'as'=>'cart.',
+    'prefix'=>'/cart'
+], function () {
+    Route::get('/', 'CartController@index')->name('index');
+    Route::post('/add', 'CartController@add')->name('add');
+    Route::get('/remove/{product}', 'CartController@remove')->name('remove');
+    Route::get('/clear', 'CartController@clear')->name('clear');
+    Route::get('/checkout', 'CartController@checkout')->name('checkout');
+});
+
 Route::get('/test',  [TestMongoController::class, 'store']);
 // Route::get('/store/dashboard',  [TestMongoController::class, 'store']);
 Route::group([

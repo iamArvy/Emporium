@@ -8,7 +8,6 @@ import Testimonial from '@/Components/TestimonialSection.vue'
 import { onMounted } from 'vue'
 interface Product {
   name: string
-  description: string
   id: string
   images: string[]
   price: number

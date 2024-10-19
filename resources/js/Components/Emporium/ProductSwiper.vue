@@ -6,7 +6,6 @@ import ProductItem from '@/Components/Emporium/ProductItem.vue';
 defineProps<{
   products: {
     name: string
-  description: string
   id: string
   images: string[]
   price: number

@@ -2,8 +2,12 @@
 import AppLayout from '@/Layouts/AppLayout.vue'
 import ProductGallery from './partials/ProductGallery.vue';
 import ProductInfo from './partials/ProductInfo.vue';
-defineProps<{
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+const props = defineProps<{
     product: {
+      id: string
         name: string
         description:string
         images:string[]
@@ -11,6 +15,19 @@ defineProps<{
         discount? : string
     }
 }>()
+
+const quantity = ref(1)
+
+const form = useForm({
+  'product_id': props.product.id,
+  'quantity' : 1,
+  'variant_id' : null
+})
+
+const addtocart = () => {
+  form.quantity = quantity.value
+  form.post(route('cart.add'))
+}
 </script>
 
 <template>
@@ -19,6 +36,19 @@ defineProps<{
         <ProductGallery :images="product.images" id="gallery" />
         <ProductInfo :product="product" />
     </section>
+    <div class="quantity">
+      <button class="quantifier" @click="quantity++">
+        add
+      </button>
+      <span>
+        {{ quantity }}
+      </span>
+      <button class="quantifier" @click="quantity>1 ? quantity-- : null">
+        subtract
+      </button>
+    </div>
+
+    <PrimaryButton @click="addtocart">AddToCart</PrimaryButton>
     <!-- <HeroSection />
     <BrandMarquee class="full-width" />
     <ProductListSection title="New Arrivals" />

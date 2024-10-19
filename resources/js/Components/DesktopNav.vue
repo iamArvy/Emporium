@@ -29,7 +29,7 @@ defineOptions({
       </nav>
       <SearchBar />
       <div class="user-options">
-        <Link><i class="bx bx-user-circle"></i></Link>
+        <Link :href="route('cart.index', )"><i class="bx bx-user-circle"></i></Link>
         <Link><i class="bx bx-cart-alt"></i></Link>
       </div>
     </section>

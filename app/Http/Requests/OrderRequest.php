@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class CreateCartRequest extends FormRequest
+class OrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +22,11 @@ class CreateCartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required | string',
-            'quantity' => 'required | integer',
-            'variant_id' => 'string'
+            'customer_name' => 'string | required',
+            'customer_email' => 'string | required',
+            'customer_phone' => 'string | required',
+            'billing_address' => 'string | required',
+            'shipping_address' => 'string | required'
         ];
     }
 }

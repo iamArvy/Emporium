@@ -73,7 +73,7 @@
     color: rgba(215, 255, 224, 1);
   }
   main {
-    background-color: var(--bodybg);
+    /* background-color: var(--bodybg); */
     color: var(--bodytext);
     /* height: 100vh; */
   }
