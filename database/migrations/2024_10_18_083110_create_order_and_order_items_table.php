@@ -16,14 +16,7 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->decimal('total', 8, 2);
-            $table->string('status')->default('pending');  
-            $table->string('payment_method')->nullable();
-            $table->string('payment_status')->default('pending');
-            $table->string('shipping_address')->nullable();
-            $table->string('billing_address')->nullable();
-            $table->string('shipping_method')->nullable();
-            $table->string('tracking_number')->nullable();
-            $table->string('shipping_status')->default('pending');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
 

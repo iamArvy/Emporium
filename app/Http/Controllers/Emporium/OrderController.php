@@ -32,7 +32,9 @@ class OrderController extends Controller
             $order = $this->orderService->create($cart->total, $cart->quantity, $validated);
             dd($order);
             if($order){
+                $order_number = $this->orderService->createOrderNumber();
                 $items = $this->orderService->createOrderItems($cart->items, $order);
+                $payment = $this->orderService->makePayment($validated[])
                 return redirect()->route('emporium.orders.show', $order->id);
             }
         }catch(Error $e){

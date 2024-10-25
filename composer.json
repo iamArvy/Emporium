@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.9",
         "mongodb/laravel-mongodb": "^5.0",
         "spatie/laravel-permission": "^6.9",
+        "stripe/stripe-php": "^16.1",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

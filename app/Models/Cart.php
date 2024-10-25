@@ -12,6 +12,7 @@ class Cart extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product');
+        return Product::findorfail($this->product_id);
     }
+
 }

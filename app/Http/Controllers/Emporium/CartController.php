@@ -33,25 +33,6 @@ class CartController extends Controller
         }
     }
 
-    public function add(Request $request)
-    {
-        $formdata = $request->all();
-        $product = Product::find($formdata['product_id']);
-
-        if (!$product) {
-            return redirect()->route('error', ['code' => 404, 'message' => 'Product Not Found']);
-        }
-
-        $cartitem = $this->user()->cart()->create($formdata);
-
-
-        if ($cartitem) {
-            return redirect()->route('cart.index')->with('success', 'Item added to cart.');
-        }
-
-        return back()->withErrors(['error' => 'Failed to add item to cart.']);
-    }
-
     public function update(Request $request)
     {
         $id = $request->cart;

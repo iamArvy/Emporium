@@ -5,20 +5,21 @@ use App\Models\Cart;
 
 class CartRepository
 {
-    public function all()
+    public function all($user)
     {
-        return Cart::all();
+        $items = $user->cart()->get();
+        foreach ($items as $item) {
+            $item->product = $item->product();
+            $item -> total_price = $item->quantity * $item->product->price;
+        }
+        return $items;
     }
 
     public function find($id)
     {
-        return Product::findOrFail($id);
+        return Cart::findOrFail($id);
     }
 
-    public function create(array $data)
-    {
-        return Product::create($data);
-    }
 
     public function update($id, array $data)
     {

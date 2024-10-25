@@ -5,19 +5,33 @@ use App\Models\Product;
 
 class ProductRepository
 {
-    public function all()
+    public function create($store, $data)
+    {
+        $store->products->create($data);
+    }
+    
+    public function all(): array
     {
         return Product::all();
     }
 
-    public function find($id)
+    public function find(string $id)
     {
         return Product::findOrFail($id);
     }
 
-    public function create(array $data)
+    public function findProductWithRelationships(string $id, array $relationships)
     {
-        return Product::create($data);
+        $product = $this->find($id);
+        foreach ($relationships as $relationship){
+            $product->$relationship = $product->$relationship();
+        }
+        return $product;
+    }
+
+    public function save(Product $product): void
+    {
+        $product->save();
     }
 
     public function update($id, array $data)

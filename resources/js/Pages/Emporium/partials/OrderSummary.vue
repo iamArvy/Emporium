@@ -3,7 +3,6 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 defineProps<{
     total: number,
-    checkout: Function
 }>()
 </script>
 <template>
@@ -12,7 +11,6 @@ defineProps<{
     <hr>
     <p> <span>Subtotal</span> <span>${{ total }}</span></p>
     <hr>
-    <PrimaryButton @click="checkout">Checkout</PrimaryButton>
 </article>
 </template>
 <style scoped>

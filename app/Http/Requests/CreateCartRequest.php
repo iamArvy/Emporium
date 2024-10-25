@@ -25,7 +25,7 @@ class CreateCartRequest extends FormRequest
         return [
             'product_id' => 'required | string',
             'quantity' => 'required | integer',
-            'variant_id' => 'string'
+            'variant_id' => 'string | nullable'
         ];
     }
 }

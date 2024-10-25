@@ -2,38 +2,32 @@
 
 namespace App\Services;
 
+use App\Services\Service;
 use App\Repositories\CartRepository;
-use App\Repositories\ProductRepository;
 
-class CartService
+class CartService extends Service
 {
-    protected $cartRepository;
+    protected $cartRepo;
 
-    public function __construct(CartRepository $cartRepository)
+    public function __construct(CartRepository $cartRepo)
     {
-        $this->cartRepository = $cartRepository;
+        $this->cartRepo = $cartRepo;
     }
 
     public function getCartItems($user)
     {
-        $productRepository = app(ProductRepository::class);
-        $cartItems = $user->cart()->get();
-        $productIds = $cartItems->pluck('product_id')->toArray();
-        $products = $productRepository->getProductsByIds($productIds);
-        foreach ($cartItems as $item) {
-            $item->product = $products->get($item->product_id);
-            $item -> total_price = $item->quantity * $item->product->price;
-        }
-        return [
-            'items' => $cartItems,
-            'total' => $cartItems->sum('total_price'),
-            'quantity' => $cartItems->sum('quantity'),
-        ];  
+        $items = $this->cartRepo->all($user);
+        $data = [
+            'items' => $items,
+            'total' => $items->sum('total_price'),
+            'quantity' => $items->sum('quantity'),
+        ];
+        return $data;
     }
 
-    public function findProduct($id)
+    public function get($id)
     {
-        return $this->productRepository->find($id);
+        return $this->cartRepo->find($id);
     }
 
     public function createProduct(array $data)

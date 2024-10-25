@@ -11,8 +11,9 @@ const props = defineProps<{
         name: string
         description:string
         images:string[]
-        price: string
-        discount? : string
+        price: number
+        discount? : number
+        rating: number
     }
 }>()
 
@@ -21,12 +22,13 @@ const quantity = ref(1)
 const form = useForm({
   'product_id': props.product.id,
   'quantity' : 1,
-  'variant_id' : null
+  'variant_id' : ''
 })
 
 const addtocart = () => {
   form.quantity = quantity.value
-  form.post(route('cart.add'))
+  form.post(route('product.add.cart'))
+  console.log(form.errors)
 }
 </script>
 

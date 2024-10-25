@@ -4,52 +4,52 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Store\StoreController;
 use App\Http\Requests\CreateProductRequest;
-use App\Models\Product;
+use App\Services\ProductService;
 
 class ProductController extends StoreController
 {
+    protected $productService;
+    
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
     
     public function index()
     {
         $products = $this->store->products();
-        // dd($products);
         return $this->render('Store/Dashboard', [
             'title' => 'Dashboard',
             'products'=> $products
         ]);
     }
 
-    public function show(Product $product)
+    public function show(Request $request)
     {
-        // dd($product);
-        // $product->load('variants');
-        $data = [
-            'title' => 'Product',
-            'product'=> $product
-        ];
-        return response()->json($data);
-        // return $this->render('Store/Product', [
-        //     'title' => 'Product',
-        //     'product'=> $product
-        // ]);
+        $id = $request->product;
+        try {
+            $product = $this->productService->getProduct();
+            $data = [
+                'title' => 'Product',
+                'product'=> $product
+            ];
+            return $this->render('Emporium/Product', $product);
+        } catch (\Exception $e) {
+            return redirect()->route('error', ['code' => 404, 'message' => 'Product Not Found']);
+        }
+        
     }
 
     public function create(CreateProductRequest $request)
     {
-
-        $validated = $request->validated();
-        
-        $imagePaths = [];
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('product-images', 'public');
-                $imagePaths[] = 'storage/'.$path;
-            }
+        try {
+            $validated = $request->validated();
+            $validated['images'] = $request->hasFile('images') ? $this->productService->uploadImage($request->hasFile('images')) : null;
+            $product = $this->productService->create($this>store, $validated);
+            return redirect()->back()->with('success', 'Product added successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
         }
-        $validated['images'] = $imagePaths;
-        $product = $this->store->products()->create($validated);
-        // return redirect()->route('store.products');
-        return response()->json(['message'=>'Product add successfully']);
     }
 
     public function createVariants(Request $request, Product $product)

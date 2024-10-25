@@ -67,6 +67,16 @@ Route::group([
     Route::get('/checkout', 'CartController@checkout')->name('checkout');
 });
 
+Route::group([
+    'middleware'=> ['auth:sanctum'],
+    'namespace'=> App\Http\Controllers\Emporium::class,
+    'as'=>'product.add.',
+    'prefix'=>'/product/add'
+], function () {
+    Route::post('/cart', 'ProductController@addtocart')->name('cart');
+    Route::post('/wishlist', 'ProductController@addtowishlist')->name('wishlist');
+});
+
 Route::get('/test',  [TestMongoController::class, 'store']);
 // Route::get('/store/dashboard',  [TestMongoController::class, 'store']);
 Route::group([
